@@ -2,10 +2,10 @@
 (function(attachTo) {
 	
 	var Player = function() {
-	    this.acceleration = 0.1;
-	    this.deceleration = 0.9;
+	    this.acceleration = 0.5;
+	    this.deceleration = 0.99;
 	    
-	    this.maxVelocity = 10;
+	    this.maxVelocity = 75;
 	    this.minVelocity = 0.01;
 	    this.velocity = new THREE.Vector3(0, 0, 0);
 	};

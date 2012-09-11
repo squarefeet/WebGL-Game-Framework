@@ -53,6 +53,7 @@
         var sceneManager = that.sceneManager,
             getDelta = that.clock.getDelta;
             
+        console.log(sceneManager.getObjects());
         
         function animate() {
             if(that.active) {

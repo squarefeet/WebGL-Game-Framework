@@ -83,6 +83,14 @@ var skybox = new Skybox();
 sceneManager.addObjectTo( 'background', skybox );
 
 
+// Create a new Starfield, telling it to track the position of the 
+// middleground's (player's) camera.
+var starfield = new Starfield(sceneManager.middleground.camera.position);
+
+// Add the starfield to the middleground
+sceneManager.addObjectTo( 'middleground', starfield );
+
+
 // Render the scene!
 renderer.start();
 
