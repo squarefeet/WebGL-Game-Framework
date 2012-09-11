@@ -99,8 +99,8 @@
 		// Call each scene's tick function (just in case the camera is using
 	    // any controls and requires updating on a per-frame basis).
 	    bg.tick.call(bg, dt);
-	    mg.tick();
-	    fg.tick();
+	    mg.tick.call(mg, dt);
+	    fg.tick.call(fg, dt);
 		
 		
         // Render the scenes

@@ -14,6 +14,12 @@ var mouseHandler = new MouseHandler();
 
 
 
+// Create our custom Player object.
+var player = new Player();
+
+
+
+
 // Create the renderer. By default it'll set width and height to window values
 // and attach the domElement to document.body. You only need one of these.
 var renderer = new Renderer();
@@ -32,9 +38,35 @@ sceneManager.background.controls.rollSpeed = Math.PI / 2;
 sceneManager.background.controls.autoForward = false;
 sceneManager.background.controls.dragToLook = false;
 
+sceneManager.middleground.controls = new THREE.FlyControls( sceneManager.middleground.camera );
+sceneManager.middleground.controls.movementSpeed = 0;
+sceneManager.middleground.controls.rollSpeed = Math.PI / 2;
+sceneManager.middleground.controls.autoForward = false;
+sceneManager.middleground.controls.dragToLook = false;
+
+
 // Make sure these controls can be updated by adding a custom tick function
 sceneManager.background.tick = function(dt) {
     this.controls.update(dt);
+};
+
+// The middleground's tick function is slightly different, as we're using
+// the middleground layer as the player and their camera, so we need to listen
+// out for what keys are pressed and adjust the camera accordingly.
+sceneManager.middleground.tick = function(dt) {
+    this.controls.update(dt);
+    
+    var keys = keyHandler.keys;
+	
+	if(keys['87']) {
+		player.moveForwards(this.camera, dt);
+	}
+	else if(keys['83']) {
+		player.moveBackwards(this.camera, dt);
+	}
+	else {
+		player.decelerate(this.camera, dt);
+	}
 };
 
 
