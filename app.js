@@ -27,7 +27,7 @@ var sceneManager = new SceneManager();
 
 // Add some camera controls to each scene's camera
 sceneManager.background.controls = new THREE.FlyControls( sceneManager.background.camera );
-sceneManager.background.controls.movementSpeed = 10;
+sceneManager.background.controls.movementSpeed = 0;
 sceneManager.background.controls.rollSpeed = Math.PI / 2;
 sceneManager.background.controls.autoForward = false;
 sceneManager.background.controls.dragToLook = false;
