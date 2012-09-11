@@ -25,6 +25,19 @@ var renderer = new Renderer();
 var sceneManager = new SceneManager();
 
 
+// Add some camera controls to each scene's camera
+sceneManager.background.controls = new THREE.FlyControls( sceneManager.background.camera );
+sceneManager.background.controls.movementSpeed = 10;
+sceneManager.background.controls.rollSpeed = Math.PI / 2;
+sceneManager.background.controls.autoForward = false;
+sceneManager.background.controls.dragToLook = false;
+
+// Make sure these controls can be updated by adding a custom tick function
+sceneManager.background.tick = function(dt) {
+    this.controls.update(dt);
+};
+
+
 // Tell the renderer to use the object manager we just created
 renderer.setSceneManager( sceneManager );
 
@@ -34,16 +47,8 @@ renderer.setSceneManager( sceneManager );
 // Create a new Skybox.
 var skybox = new Skybox();
 
-// Create the player (a middleground object)
-var player = new Player();
-
-// Create a starfield and tell it to render onto the player's camera
-var starfield = new Starfield(player, 1000, 1000);
-
-
-// Add the skybox to the objectManager so it'll be rendered by the renderer
-objectManager.addObject('background', skybox);
-objectManager.addObject('middleground', player);
+// Add this skybox to the background layer
+sceneManager.addObjectTo( 'background', skybox );
 
 
 // Render the scene!

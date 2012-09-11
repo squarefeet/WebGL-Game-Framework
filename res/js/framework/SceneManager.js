@@ -1,5 +1,7 @@
 (function(attachTo) {
 	
+	// A no-op function. Used by each Scene instance's tick as a "placeholder"
+	var noop = function() {};
 	
 	function Scene() {
 	    // Create a new scene and camera.
@@ -9,8 +11,10 @@
 		// Add the camera to the scene to save doing it later.
 		scene.add(camera);
 		
-		// Pass back the scene and camera
-		return { scene: scene, camera: camera };
+		// Pass back the scene and camera, creating a no-op tick function
+		// as well. Override this tick function with your own if you've
+		// applied any camera controls or whatnot.
+		return { scene: scene, camera: camera, tick: noop };
 	}
 	
 	
@@ -59,7 +63,8 @@
 	        scene = this[level].scene;
 	    
 	    // Add object to the specified level.
-	    level = this[level + 'Objects'].push(object);
+	    level = this[level + 'Store'];
+	    level.push(object);
 	    
 	    // Add the renderable items to the specified scene
 	    for(i; i < il; ++i) {
@@ -123,7 +128,7 @@
 	    level.sort(sortFn);
 	    
 	    // Rebuild the cache.
-	    cache = cache.concat(bg, mg, fg);
+	    that.storeCache = cache.concat(bg, mg, fg);
 	};
 	
 	

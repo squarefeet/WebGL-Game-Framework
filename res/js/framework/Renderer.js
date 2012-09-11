@@ -52,7 +52,7 @@
         
         var sceneManager = that.sceneManager,
             getDelta = that.clock.getDelta;
-        
+            
         
         function animate() {
             if(that.active) {
@@ -94,6 +94,13 @@
 			obj = objects[i];
             obj.tick(dt);
 		}
+		
+		
+		// Call each scene's tick function (just in case the camera is using
+	    // any controls and requires updating on a per-frame basis).
+	    bg.tick.call(bg, dt);
+	    mg.tick();
+	    fg.tick();
 		
 		
         // Render the scenes

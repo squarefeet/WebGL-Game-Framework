@@ -1,7 +1,10 @@
 (function(attachTo) {
     
     // Shared constructor function. Used by inherit().
-	var Ctor = function() {};
+	var Ctor = function() {},
+	
+	    // Cached slice function
+	    slice = Array.prototype.slice;
 	
 	/**
 	*	Straight-forward copy of properties from one object to another.
