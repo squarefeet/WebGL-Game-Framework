@@ -31,54 +31,19 @@ renderer.setObjectManager( objectManager );
 
 
 
-// Create a new BackgroundObject.
-var skybox = new BackgroundObject();
+// Create a new Skybox.
+var skybox = new Skybox();
 
-    // In this skybox, lets add a new sphere, with a texture.
-    var skyboxTexture = THREE.ImageUtils.loadTexture('universe_sml.jpg');
-    
-    var skyboxMaterial = new THREE.MeshBasicMaterial({ 
-        map: skyboxTexture
-    });
-    
-    // Make sure the sphere's material will be visible from the inside.
-	skyboxMaterial.side = THREE.DoubleSide;
-	
-	// Create the sphere.
-	var skyboxGeometry = new THREE.SphereGeometry(10000, 8, 8);
-	
-	// Using the geometry and mesh created above, create a pretty mesh.
-	var skyboxMesh = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
-	
-	// Add this mesh to the skybox scene.
-	skybox.objects.sphere = skyboxMesh;
-	
-	// Add the sphere to the skybox scene
-    skybox.objects.scene.add(skybox.objects.sphere);
-    
-	// Tell the skybox's camera to use Three.js's lovely FlyControls.
-    skybox.objects.controls = new THREE.FlyControls( skybox.objects.camera );
-    skybox.objects.controls.movementSpeed = 0;
-    skybox.objects.controls.rollSpeed = Math.PI / 2;
-    skybox.objects.controls.autoForward = false;
-    skybox.objects.controls.dragToLook = false;
+// Create the player (a middleground object)
+var player = new Player();
 
-
-// Set a function on the skybox that will deal with updating the skybox's 
-// objects (moving the camera, etc.)
-skybox.setTickFunction(function(objects, dt) {
-    objects.controls.update(dt);
-});
-
-
-// Tell the skybox to have a function that will deal with how to render the
-// skybox's objects. Unused at this point.
-skybox.setRenderFunction(function(objects, dt) {});
-
+// Create a starfield and tell it to render onto the player's camera
+var starfield = new Starfield(player, 1000, 1000);
 
 
 // Add the skybox to the objectManager so it'll be rendered by the renderer
 objectManager.addObject('background', skybox);
+objectManager.addObject('middleground', player);
 
 
 // Render the scene!

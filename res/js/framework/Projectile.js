@@ -1,0 +1,7 @@
+function Projectile() {
+	
+}
+
+Projectile.prototype = {
+	
+};
