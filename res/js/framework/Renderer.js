@@ -40,24 +40,24 @@
     };
     
     
-    Renderer.prototype.setObjectManager = function(manager) {
-        this.objectManager = manager;
+    Renderer.prototype.setSceneManager = function(manager) {
+        this.sceneManager = manager;
     };
 
     
     Renderer.prototype.start = function() {
         var that = this;
         
-        if(!that.objectManager) return;
+        if(!that.sceneManager) return;
         
-        var objectManager = that.objectManager,
+        var sceneManager = that.sceneManager,
             getDelta = that.clock.getDelta;
         
         
         function animate() {
             if(that.active) {
                 requestAnimationFrame(animate);
-                that.render( getDelta.call(that.clock), objectManager.getObjects() );
+                that.render( getDelta.call(that.clock), sceneManager.getObjects() );
             }
         }
         
@@ -74,30 +74,32 @@
     
     
     Renderer.prototype.render = function(dt, objects) {
-        
         var that = this,
-            renderer = that.renderer;
+            renderer = that.renderer,
+            i = 0, 
+            il = objects.length,
+            obj,
+            sceneManager = that.sceneManager,
+            bg = sceneManager.background,
+            mg = sceneManager.middleground,
+            fg = sceneManager.foreground;
         
+        
+        // We need to clear the canvas since this renderer doesn't autoclear.
         renderer.clear();
         
         
-        var i = 0, il = objects.length,
-            obj;
-        
-
+        // Update all the objects in the sceneManager's cache.
 		for(i = 0; i < il; ++i) {
 			obj = objects[i];
             obj.tick(dt);
-            obj.render(dt);
-            
-            renderer.render(obj.objects.scene, obj.objects.camera);
 		}
-        
-			//         do {
-			//             
-			// --i;
-			//         }
-			//         while(i > 0);        
+		
+		
+        // Render the scenes
+        renderer.render(bg.scene, bg.camera);
+        renderer.render(mg.scene, mg.camera);
+        renderer.render(fg.scene, fg.camera);
     };
     
     

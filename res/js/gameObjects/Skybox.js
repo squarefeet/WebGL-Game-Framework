@@ -4,17 +4,18 @@
 		
 		var bg, texture, material, geometry, mesh;
 		
+		this.objects = {};
+		
+		
 		// Create the BackgroundObject instance and the required THREE objects.
-		bg 				=	this.backgroundObject = new BackgroundObject();
+		texture 		= 	this.texture    = THREE.ImageUtils.loadTexture('res/img/backdrops/universe_sml.jpg');
 		
-		texture 		= 	this.texture = THREE.ImageUtils.loadTexture('res/img/backdrops/universe_sml.jpg');
-		
-		material 		= 	this.material = new THREE.MeshBasicMaterial({ map: texture });
+		material 		= 	this.material   = new THREE.MeshBasicMaterial({ map: texture });
 		material.side 	= 	THREE.DoubleSide;
 		
-		geometry 		=	this.geometry = new THREE.SphereGeometry(10000, 8, 8);
+		geometry 		=	this.geometry   = new THREE.SphereGeometry(10000, 8, 8);
 		
-		mesh 			= 	this.mesh = new THREE.Mesh(this.geometry, this.material);
+		mesh 			= 	this.mesh       = new THREE.Mesh(this.geometry, this.material);
 		
 		
 		// Add the mesh to the BackgroundObject and the mesh to the scene

@@ -18,15 +18,15 @@ var mouseHandler = new MouseHandler();
 // and attach the domElement to document.body. You only need one of these.
 var renderer = new Renderer();
 
-// Create an object manager that'll hold all our game objects. It organises
+// Create a scene manager that'll hold all the scenes and game objects. It organises
 // things into three groups (background (skybox, etc), middleground (stuff
 // what moves), and foreground (the HUD)). Each group is then sorted according
-// to its "z-index" value, so you can control the renderering order.
-var objectManager = new ObjectManager();
+// to its "z-index" value, so you can control the rendering order.
+var sceneManager = new SceneManager();
 
 
 // Tell the renderer to use the object manager we just created
-renderer.setObjectManager( objectManager );
+renderer.setSceneManager( sceneManager );
 
 
 
