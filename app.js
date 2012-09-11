@@ -35,7 +35,7 @@ renderer.setObjectManager( objectManager );
 var skybox = new BackgroundObject();
 
     // In this skybox, lets add a new sphere, with a texture.
-    var skyboxTexture = THREE.ImageUtils.loadTexture('universe.jpg');
+    var skyboxTexture = THREE.ImageUtils.loadTexture('universe_sml.jpg');
     
     var skyboxMaterial = new THREE.MeshBasicMaterial({ 
         map: skyboxTexture
