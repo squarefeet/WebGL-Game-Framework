@@ -14,32 +14,31 @@
 	Player.prototype.moveForwards = function(camera, dt) {
 	    var that = this,
 	        vel = that.velocity,
-	        pos = camera.position;
-	    
-	    if(vel.z < that.maxVelocity) {
-	        vel.addScalar(that.acceleration);
-        }
-        
-        pos.z += vel.z;
-        
-        console.log(vel.z);
-	};
-	
-	
-	Player.prototype.moveBackwards = function(camera, dt) {
-	    var that = this,
-	        vel = that.velocity,
 	        pos = camera.position,
 	        acceleration = that.acceleration;
 	    
-	    if(Math.abs(vel.z) < that.maxVelocity) {
+	    if(vel.z < that.maxVelocity) {    
 	        vel.x -= acceleration;
 	        vel.y -= acceleration;
 	        vel.z -= acceleration;
         }
         
         pos.z += vel.z;
-        console.log(vel.z);
+        // console.log(vel.z);
+	};
+	
+	
+	Player.prototype.moveBackwards = function(camera, dt) {
+	    var that = this,
+	        vel = that.velocity,
+	        pos = camera.position;
+	    
+	    if(Math.abs(vel.z) < that.maxVelocity) {
+	        vel.addScalar(that.acceleration);
+        }
+        
+        pos.z += vel.z;
+        // console.log(vel.z);
 	};
 	
 	
