@@ -3,10 +3,10 @@
 	// A no-op function. Used by each Scene instance's tick as a "placeholder"
 	var noop = function() {};
 	
-	function Scene() {
+	function Scene(near, far) {
 	    // Create a new scene and camera.
 		var scene = new THREE.Scene();
-		var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+		var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, near || 1, far || 10000);
 		
 		// Add the camera to the scene to save doing it later.
 		scene.add(camera);
@@ -26,8 +26,18 @@
 		this.background = new Scene();
 		
 		// The middleground scene holds all objects that will inhabit the
-		// game world (ships, the player, etc)
-		this.middleground = new Scene();
+		// game world (ships, the player, etc). Giving this scene's camera
+		// a near clipping z position (I think it's a z-position anyway) of 3,
+		// so that the HUD doesn't get overlapped by any of this scenes objects.
+		this.middleground = new Scene(3, 100000);
+        this.middleground.fog = new THREE.Fog( 0x000000, 3500, 1000 );
+        this.middleground.fog.color.setHSV( 0.51, 0.6, 0.025 );
+		
+		
+		var light = new THREE.DirectionalLight(0x00c1f8, 0.6);
+		light.position.set(0, 0, -1);
+		this.middleground.camera.add(light);
+		
 		
 		// The foreground will hold static objects to sit on top of everything
 		// else (the HUD, lensflares, etc.).
@@ -60,11 +70,17 @@
 	SceneManager.prototype.addObjectTo = function(level, object) {
 	    var renderables = object.renderables,
 	        i = 0, il = renderables.length,
-	        scene = this[level].scene;
+	        scene = this[level].scene,
+	        store;
+	    
+        // Set the sceneManager property for this object
+	    object.sceneManager = this;
+	    object.sceneLevel = level;
 	    
 	    // Add object to the specified level.
-	    level = this[level + 'Store'];
-	    level.push(object);
+	    store = this[level + 'Store'];
+	    store.push(object);
+	    
 	    
 	    // Add the renderable items to the specified scene
 	    for(i; i < il; ++i) {
@@ -72,7 +88,10 @@
 	    }
 	    
 	    // Update the store cache.
-	    this.updateStores(level);
+	    this.updateStores(store);
+	    
+	    // Fire the update event
+	    eventHandler.fire('scene:' + level + ':add', object);	    
 	    
 	    return this;
 	};
@@ -82,32 +101,34 @@
     *   Removes an object from a given level.
     */
 	SceneManager.prototype.removeObjectFrom = function(level, object) {
-	    // Grab the specified level array
-	    level = this[level + 'Objects'];
+	    var renderables = object.renderables,
+	        i = 0, il = renderables.length,
+	        scene = this[level].scene,
+	        store;
 	    
-	    var i = 0, il = level.length, obj,
-	        found = 0;
 	    
-	    // Loop thru and find a matching object, splicing it out from the level
-	    // array if it's found. 
+	    // Cache the level Array
+	    store = this[level + 'Store'];
+	    
+	    // Remove the renderable items from the specified scene
 	    for(i; i < il; ++i) {
-	        obj = level[i];
-	        
-	        if(obj === object) {
-	            found = 1;
-	            level.splice(i, 1);
-	            break;
-	        }
+	        scene.remove(renderables[i]);
 	    }
 	    
-	    // Rebuild the cache if we've found an object and its been removed
-	    if(found) {
-	        this.updateStores(level);
-        }
-        
-        return this;
+	    // Update the store cache.
+	    this.updateStores(store);
+	    
+	    
+        // Fire the update event
+	    eventHandler.fire('scene:' + level + ':remove', object);
+	    
+	    return this;
 	};
 	
+	SceneManager.prototype.removeRenderable = function(level, renderable) {
+	    var scene = this[level].scene;
+        scene.remove(renderable);
+	};
 	
 	/**
 	*   Rebuilds the object cache store. Called whenever a new object is added

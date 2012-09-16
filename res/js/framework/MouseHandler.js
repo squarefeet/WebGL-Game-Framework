@@ -5,6 +5,13 @@
         _null = null;  
     
     
+    function bind(scope, fn) {
+        return function() {
+            fn.apply(scope, arguments);
+        };
+    }
+    
+    
     function MouseHandler(element) {
         var that = this;
         
@@ -16,6 +23,8 @@
         that.y = 0;
         
         that.addEvents();
+        
+        
     }
     
     
@@ -23,9 +32,15 @@
         var that = this,
             el = that.el;
         
-        el.addEventListener('mousedown', that.onMouseDown, false);
-        el.addEventListener('mouseup', that.onMouseUp, false);
-        el.addEventListener('mousemove', that.onMouseMove, false);        
+        el.addEventListener('mousedown', function(e) {
+            that.onMouseDown.call(that, e);
+        }, false);
+        el.addEventListener('mouseup', function(e) {
+            that.onMouseUp.call(that, e);
+        }, false);
+        el.addEventListener('mousemove', function(e) {
+            that.onMouseMove.call(that, e);
+        }, false);        
     };
     
     
@@ -43,10 +58,10 @@
         var button = e.button,
             that = this;
         
-        if(button === LEFTBUTTON) {
+        if(button == LEFTBUTTON) {
             that.left = e;
         }
-        else if(button === RIGHTBUTTON) {
+        else if(button == RIGHTBUTTON) {
             that.right = e;
         }
     };

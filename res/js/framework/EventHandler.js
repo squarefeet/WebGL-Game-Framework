@@ -49,7 +49,7 @@
             this._loopNames(names, function(name) {
                 ev = store[name];
                 if(ev) { 
-                    ev.fn.apply(scope || ev.scope, args);
+                    ev.fn.apply(scope || ev.scope || {}, args);
                 }
             });
         }

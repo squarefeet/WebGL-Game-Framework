@@ -12,6 +12,9 @@
         // Give this instance a default zIndex
         this.zIndex = 1;
         
+        // Apply a default 'classification' (friendly, enemy, unknown; ints 0-2 inclusive)
+        this.classification = 2;        
+        
         // Call the initialization function
 		this.initialize.apply(this, arguments);
 		
@@ -26,8 +29,15 @@
         
         // A default, no-op initialize function. Override it with your own
         // functionality.
-        initialize: noop
+        initialize: noop,
         
+        // A link to the scene manager. Link create when added to sceneManager.
+        sceneManager: null,
+        sceneLevel: null,
+        
+        remove: function(obj) {
+            this.sceneManager.removeRenderable(this.sceneLevel, obj);
+        }
     };
     
     

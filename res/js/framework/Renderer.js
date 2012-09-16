@@ -17,10 +17,15 @@
     Renderer.prototype.init = function(width, height, parent) {
         var that = this;
         
-        that.renderer = new THREE.WebGLRenderer();
+        that.renderer = new THREE.WebGLRenderer({antialias: true, alpha: true});
     	that.renderer.setFaceCulling(0);
     	that.renderer.setSize(width, height);
     	that.renderer.autoClear = false;
+        that.renderer.sortObjects = false;
+    	
+        // that.renderer.gammaInput = true;
+        // that.renderer.gammaOutput = true;
+        // that.renderer.physicallyBasedShading = true;
     	
     	parent.appendChild( that.renderer.domElement );
     	
@@ -52,8 +57,6 @@
         
         var sceneManager = that.sceneManager,
             getDelta = that.clock.getDelta;
-            
-        console.log(sceneManager.getObjects());
         
         function animate() {
             if(that.active) {

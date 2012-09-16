@@ -11,7 +11,7 @@
 	};
 	
 	
-	Player.prototype.moveForwards = function(camera, dt) {
+	Player.prototype.moveForwards = function(camera, dt, controls) {
 	    var that = this,
 	        vel = that.velocity,
 	        pos = camera.position,
@@ -23,7 +23,7 @@
 	        vel.z -= acceleration;
         }
         
-        pos.z += vel.z;
+        pos.addSelf(vel);
         // console.log(vel.z);
 	};
 	
