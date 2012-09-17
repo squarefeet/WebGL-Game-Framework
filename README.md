@@ -50,3 +50,18 @@ _(Currently in progress)_
                     (I think!)
                     
 
+----
+
+###Object "Classifications"###
+There are three "classifications" of GameObjects, given by GameObject.classification:
+
+* 0 - Friendly to the player
+* 1 - Enemy to the player
+* 2 - Unknown or neutral.
+
+
+Planning to use these classifications to guide basic AI:
+
+* 0 - Don't fire on player
+* 1 - Fire on player without doubts
+* 2 - Remain neutral until fired upon, then become the side that fired's enemy.

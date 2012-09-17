@@ -34,7 +34,7 @@
         this.middleground.fog.color.setHSV( 0.51, 0.6, 0.025 );
 		
 		
-		var light = new THREE.DirectionalLight(0x00c1f8, 0.6);
+		var light = new THREE.DirectionalLight(0x00c1f8, 1);
 		light.position.set(0, 0, -1);
 		this.middleground.camera.add(light);
 		

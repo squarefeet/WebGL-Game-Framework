@@ -35,9 +35,9 @@
         createShip: function() {
             var material = new THREE.MeshPhongMaterial({ 
                 ambient: 0x333333, 
-                color: 0xffffff, 
+                color: 0x333333, 
                 specular: 0xffffff, 
-                shininess: 50, 
+                shininess: 100, 
                 perPixel: true 
             });
             

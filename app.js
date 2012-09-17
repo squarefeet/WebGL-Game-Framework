@@ -42,7 +42,7 @@ sceneManager.background.controls = new THREE.FlyControlsVelocity(
     1000 // maximum movement velocity
 );
 sceneManager.background.controls.movementSpeed = 0;
-sceneManager.background.controls.rollSpeed = Math.PI / 2;
+sceneManager.background.controls.rollSpeed = Math.PI / 3;
 
 sceneManager.middleground.controls = new THREE.FlyControlsVelocity( 
     sceneManager.middleground.camera,
@@ -51,7 +51,7 @@ sceneManager.middleground.controls = new THREE.FlyControlsVelocity(
     0.97, // deceleration multiplier
     1000 // maximum movement velocity
 );
-sceneManager.middleground.controls.rollSpeed = Math.PI / 2;
+sceneManager.middleground.controls.rollSpeed = Math.PI / 3;
 
 
 // Make sure these controls can be updated by adding a custom tick function
@@ -73,10 +73,10 @@ sceneManager.middleground.tick = function(dt) {
 	if(mouseHandler.left) {
 	    
         if(canFire1) {
-	        var proj = new Projectile(this, -5);
+	        var proj = new Projectile(this.camera, -5);
 	        sceneManager.addObjectTo( 'middleground', proj );
 	        
-	        var proj = new Projectile(this, 5);
+	        var proj = new Projectile(this.camera, 5);
 	        sceneManager.addObjectTo( 'middleground', proj );
 
 	        canFire1 = false;
@@ -103,7 +103,7 @@ var skybox = new Skybox();
 // Add this skybox to the background layer
 sceneManager.addObjectTo( 'background', skybox );
 
-var planet = new Sun();
+var planet = new Sun(100, 200, -100);
 sceneManager.addObjectTo( 'background', planet );
 
 // Create a new Starfield, telling it to track the position of the 
@@ -115,19 +115,26 @@ sceneManager.addObjectTo( 'background', planet );
 
 
 
-for(var i = 0; i < 100; ++i) {
-    var enemyShip = new Ship(
-        Math.random() * 1000 - 500, 
-        Math.random() * 1000 - 500, 
-        Math.random() * 1000 - 500, 
-        Math.random(),
-        Math.random(),
-        Math.random(),
-        Math.random() * 500
-    );
-    enemyShip.classification = Math.floor(Math.random() * 2);
-    sceneManager.addObjectTo( 'middleground', enemyShip );
-}
+// for(var i = 0; i < 100; ++i) {
+//     var enemyShip = new Ship(
+//         Math.random() * 1000 - 500, 
+//         Math.random() * 1000 - 500, 
+//         Math.random() * 1000 - 500, 
+//         Math.random(),
+//         Math.random(),
+//         Math.random(),
+//         Math.random() * 500
+//     );
+//     enemyShip.classification = Math.floor(Math.random() * 2);
+//     sceneManager.addObjectTo( 'middleground', enemyShip );
+// }
+
+var turret = new Turret(100, 0, -500);
+
+// Make this turret an enemy turret, so it'll fire on the player by default.
+turret.classification = 1;
+
+sceneManager.addObjectTo( 'middleground', turret );
 
 
 var light = new THREE.PointLight(0xffffff);

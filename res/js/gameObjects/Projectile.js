@@ -27,19 +27,19 @@
             });
             
             // Create a cube.
-            this.geometry = new THREE.CubeGeometry(1, 1, 1);
+            this.geometry = new THREE.CubeGeometry(3, 3, 3);
             
             // Create a mesh and copy the position of the parent object's
             // camera.
             this.object = new THREE.Mesh(this.geometry, this.material);
-            this.object.position.copy(this.parent.camera.position);
+            this.object.position.copy(this.parent.position);
             
             this.startPos = this.object.position.z + 0;
             
             // Create a new matrix and copy the matrix from the parent 
             // object's camera.
             this.matrix = new THREE.Matrix4();
-            this.matrix.copy(parent.camera.matrix);
+            this.matrix.copy(this.parent.matrix);
             
             // Apply the matrix to the object, and set default translation
             // values so we can control exactly where on the screen this projectile
@@ -74,10 +74,6 @@
                 distance = pos.distanceTo(childPos);
                 
                 if(distance < 20 && typeof child.onImpact === 'function') {
-                    // children[i].material.color.setHex(0xff0000);
-                    // this.renderables.length = 0;
-                    // this.remove(this.object);
-                    
                     children[i].onImpact(this);
                     this.renderables.length = 0;
                     this.remove(this.object);
@@ -87,17 +83,20 @@
             
         },
         
-        tick: function() {      
+        tick: function() {
             this.object.matrix.copy(this.matrix);
             
-            // translate the projectile 1 unit along the -Z axis.
+            // translate the projectile along the Z axis.
             this.object.translateZ( this.speed );
     		this.object.matrixWorldNeedsUpdate = true;
     		
-    		if(this.object.position.distanceTo(this.parent.camera.position) > this.range) {
+    		// Remove projectile if out of range
+    		if(this.object.position.distanceTo(this.parent.position) > this.range) {
     		    this.renderables.length = 0;
     		    this.remove(this.object);
     		}
+    		
+    		// Otherwise check any collisions
     		else {
     		    this.castRay();
 		    }

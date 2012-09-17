@@ -8,14 +8,14 @@
         texture1: THREE.ImageUtils.loadTexture( "res/img/textures/lensflare/lensflare2.png" ),
         texture2: THREE.ImageUtils.loadTexture( "res/img/textures/lensflare/lensflare3.png" ),
         
-        initialize: function() {
+        initialize: function(x, y, z) {
             // var dirLight = new THREE.DirectionalLight( 0xffffff, 0.125 );
             // dirLight.position.set( 0, -1, 0 ).normalize();
             // dirLight.color.setHSV( 0.1, 0.725, 0.9 );
             // this.renderables.push( dirLight );
             
             // this.addLight( 0.55, 0.825, 0.99, 5000, 0, -1000 );
-            this.addLight( 0.08, 0.825, 0.99,    0, 0, -1000 );
+            this.addLight( 0.08, 0.825, 0.99, x || 0, y || 0, z || -1000 );
             // this.addLight( 0.995, 0.025, 0.99, 5000, 5000, -1000 );
         },
         
