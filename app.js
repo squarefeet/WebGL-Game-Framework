@@ -96,6 +96,37 @@ renderer.setSceneManager( sceneManager );
 
 
 
+function loadCollada(url, callback) {
+    var camera, scene, renderer, objects;
+	var particleLight, pointLight;
+	var dae, skin;
+
+	var loader = new THREE.ColladaLoader();
+	loader.options.convertUpAxis = true;
+	loader.load( url, function ( collada ) {
+
+		dae = collada.scene;
+		skin = collada.skins[ 0 ];
+
+		dae.scale.x = dae.scale.y = dae.scale.z = 0.3;		
+		dae.updateMatrix();
+
+		callback(dae, skin);
+
+	} );
+}
+
+
+loadCollada('./ship1.dae', function(dae, skin) {
+    setTimeout(function() {
+        dae.position.z = -1000;
+        dae.position.x = -200;
+        
+        dae.rotation.y = Math.PI;
+        dae.rotation.x = Math.PI / 10;
+        sceneManager.middleground.scene.add(dae);
+    }, 0);
+});
 
 // Create a new Skybox.
 var skybox = new Skybox();
