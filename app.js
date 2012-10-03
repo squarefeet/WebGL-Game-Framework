@@ -12,18 +12,6 @@ var keyHandler = new KeyHandler();
 // It also doesn't use the EventHandler. Maybe it should...
 var mouseHandler = new MouseHandler();
 
-
-
-// Create our custom Player object.
-var player = new Player();
-
-
-
-
-// Create the renderer. By default it'll set width and height to window values
-// and attach the domElement to document.body. You only need one of these.
-var renderer = new Renderer();
-
 // Create a scene manager that'll hold all the scenes and game objects. It organises
 // things into three groups (background (skybox, etc), middleground (stuff
 // what moves), and foreground (the HUD)). Each group is then sorted according
@@ -33,25 +21,29 @@ var sceneManager = new SceneManager();
 
 
 
+
+
+
+
 // Add some camera controls to each scene's camera
 sceneManager.background.controls = new THREE.FlyControlsVelocity( 
     sceneManager.background.camera,
-    undefined, // domElement  (optional)
-    0.5, // acceleration multiplier
+    document, // domElement
+    0.8, // acceleration multiplier
     0.97, // deceleration multiplier
     1000 // maximum movement velocity
 );
 sceneManager.background.controls.movementSpeed = 0;
-sceneManager.background.controls.rollSpeed = Math.PI / 3;
+sceneManager.background.controls.rollSpeed = Math.PI / 2;
 
 sceneManager.middleground.controls = new THREE.FlyControlsVelocity( 
     sceneManager.middleground.camera,
-    undefined, // domElement  (optional)
-    0.5, // acceleration multiplier
+    document, // domElement
+    0.8, // acceleration multiplier
     0.97, // deceleration multiplier
     1000 // maximum movement velocity
 );
-sceneManager.middleground.controls.rollSpeed = Math.PI / 3;
+sceneManager.middleground.controls.rollSpeed = Math.PI / 2;
 
 
 // Make sure these controls can be updated by adding a custom tick function
@@ -91,42 +83,9 @@ sceneManager.middleground.tick = function(dt) {
 
 
 
-// Tell the renderer to use the object manager we just created
-renderer.setSceneManager( sceneManager );
 
 
 
-function loadCollada(url, callback) {
-    var camera, scene, renderer, objects;
-	var particleLight, pointLight;
-	var dae, skin;
-
-	var loader = new THREE.ColladaLoader();
-	loader.options.convertUpAxis = true;
-	loader.load( url, function ( collada ) {
-
-		dae = collada.scene;
-		skin = collada.skins[ 0 ];
-
-		dae.scale.x = dae.scale.y = dae.scale.z = 0.3;		
-		dae.updateMatrix();
-
-		callback(dae, skin);
-
-	} );
-}
-
-
-loadCollada('./ship1.dae', function(dae, skin) {
-    setTimeout(function() {
-        dae.position.z = -1000;
-        dae.position.x = -200;
-        
-        dae.rotation.y = Math.PI;
-        dae.rotation.x = Math.PI / 10;
-        sceneManager.middleground.scene.add(dae);
-    }, 0);
-});
 
 // Create a new Skybox.
 var skybox = new Skybox();
@@ -135,7 +94,7 @@ var skybox = new Skybox();
 sceneManager.addObjectTo( 'background', skybox );
 
 var planet = new Sun(100, 200, -100);
-sceneManager.addObjectTo( 'background', planet );
+sceneManager.addObjectTo( 'middleground', planet );
 
 // Create a new Starfield, telling it to track the position of the 
 // middleground's (player's) camera.
@@ -144,28 +103,29 @@ sceneManager.addObjectTo( 'background', planet );
 // Add the starfield to the middleground
 // sceneManager.addObjectTo( 'middleground', starfield );
 
+var ships = [];
 
+for(var i = 0; i < 2; ++i) {
+    var enemyShip = new Ship(
+        Math.random() * 1000 - 500, 
+        Math.random() * 1000 - 500, 
+        Math.random() * 1000 - 500, 
+        Math.random(),
+        Math.random(),
+        Math.random(),
+        Math.random() * 100
+    );
+    enemyShip.classification = Math.floor(Math.random() * 2);
+    
+    ships.push(enemyShip);
+}
 
-// for(var i = 0; i < 100; ++i) {
-//     var enemyShip = new Ship(
-//         Math.random() * 1000 - 500, 
-//         Math.random() * 1000 - 500, 
-//         Math.random() * 1000 - 500, 
-//         Math.random(),
-//         Math.random(),
-//         Math.random(),
-//         Math.random() * 500
-//     );
-//     enemyShip.classification = Math.floor(Math.random() * 2);
-//     sceneManager.addObjectTo( 'middleground', enemyShip );
-// }
-
-var turret = new Turret(100, 0, -500);
-
-// Make this turret an enemy turret, so it'll fire on the player by default.
-turret.classification = 1;
-
-sceneManager.addObjectTo( 'middleground', turret );
+// var turret = new Turret(100, 0, -500);
+// 
+// // Make this turret an enemy turret, so it'll fire on the player by default.
+// turret.classification = 1;
+// 
+// sceneManager.addObjectTo( 'middleground', turret );
 
 
 var light = new THREE.PointLight(0xffffff);
@@ -174,8 +134,33 @@ sceneManager.middleground.scene.add( light );
 // Create the HUD
 var hud = new HUD();
 sceneManager.addObjectTo( 'foreground', hud );
+// sceneManager.middleground.camera.add(hud.parent);
 
+
+
+// Create the renderer. By default it'll set width and height to window values
+// and attach the domElement to document.body. You only need one of these.
+var renderer = new Renderer();
+
+// Tell the renderer to use the object manager we just created
+renderer.setSceneManager( sceneManager );
 
 // Render the scene!
 renderer.start();
+
+
+
+
+
+
+
+
+// setTimeout(function() {
+//     
+//     ships.forEach(function(val) {
+//         sceneManager.addObjectTo( 'middleground', val );
+//     });
+//     
+// 
+// }, 5000);
 

@@ -23,6 +23,28 @@
     
     GameObject.prototype = {
         
+        loadCollada: function(url, callback) {
+            var camera, scene, renderer, objects;
+        	var particleLight, pointLight;
+        	var dae, skin;
+
+        	var loader = new THREE.ColladaLoader();
+            loader.options.convertUpAxis = true;
+        	loader.load( url, function ( collada ) {
+
+        		dae = collada.scene;
+        		skin = collada.skins[ 0 ];
+
+        		dae.scale.x = dae.scale.y = dae.scale.z = 0.3;		
+        		dae.updateMatrix();
+        		
+                // dae.rotation.y = -90 / (Math.PI*180);
+
+        		callback(dae, skin);
+
+        	} );
+        },
+        
         // The default, no-op tick function. Required by the Renderer. Override
         // with your own if necessary.
         tick: noop,

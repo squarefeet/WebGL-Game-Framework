@@ -17,7 +17,7 @@
 			to[i] = from[i];
 		}
 	};
-	
+
 	
 	/**
 	*	Classical inheritance emulation.

@@ -7,7 +7,7 @@
     
     Radar.prototype = {
 
-        threshold: 2000,
+        threshold: 5000,
         
         dotRadius: 2,
         
@@ -35,6 +35,12 @@
                 opacity: 0.75,
             }));
             
+            
+            var that = this;
+            
+            eventHandler.on('scene:middleground:add', function(obj) {
+                that.addObject(obj);
+            });
             
             this.parent.add(radar);
             

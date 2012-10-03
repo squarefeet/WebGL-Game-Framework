@@ -7,8 +7,9 @@ THREE.FlyControlsVelocity = function ( object, domElement, acceleration, deceler
 
 	this.object = object;
 
-	this.domElement = ( domElement !== undefined ) ? domElement : document;
-	if ( domElement ) this.domElement.setAttribute( 'tabindex', -1 );
+	this.domElement = ( domElement !== undefined ) ? domElement : null;
+	
+    // if ( domElement ) this.domElement.setAttribute( 'tabindex', -1 );
 
 	// API
 
@@ -379,13 +380,15 @@ THREE.FlyControlsVelocity = function ( object, domElement, acceleration, deceler
 		};
 
 	};
+    
+    if(this.domElement) {
+    	this.domElement.addEventListener( 'mousemove', bind( this, this.mousemove ), false );
+    	this.domElement.addEventListener( 'mousedown', bind( this, this.mousedown ), false );
+    	this.domElement.addEventListener( 'mouseup',   bind( this, this.mouseup ), false );
 
-	this.domElement.addEventListener( 'mousemove', bind( this, this.mousemove ), false );
-	this.domElement.addEventListener( 'mousedown', bind( this, this.mousedown ), false );
-	this.domElement.addEventListener( 'mouseup',   bind( this, this.mouseup ), false );
-
-	this.domElement.addEventListener( 'keydown', bind( this, this.keydown ), false );
-	this.domElement.addEventListener( 'keyup',   bind( this, this.keyup ), false );
+    	this.domElement.addEventListener( 'keydown', bind( this, this.keydown ), false );
+    	this.domElement.addEventListener( 'keyup',   bind( this, this.keyup ), false );
+    }
 
 	this.updateMovementVector();
 	this.updateRotationVector();

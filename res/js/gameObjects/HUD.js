@@ -7,10 +7,11 @@
         
         materialSettings: {   
             color: 0x00c1f8,
-            opacity: 0.3,
+            opacity: 0.5,
+            linewidth: 1
         },
         
-        scale: 0.002,
+        scale: 0.0020,
         
         initialize: function() {
             this.parent = new THREE.Object3D();            
@@ -45,9 +46,11 @@
             this.parent.add(thr);
             
             
-            this.makeVelHealthOutline(0, 0, 128);
+            // this.makeVelHealthOutline(0, 0, 128);
             
-            this.makeVelocity(64, -128, 128, 94);
+            // this.makeVelocity(64, -128, 128, 94);
+            
+            this.makeVelocityReadout(86);
             
             this.radar = new Radar(0, -256, 0, 64);
             
@@ -95,6 +98,73 @@
 			mesh.scale.set( 1, 1, 1 );
 			return mesh;
         },
+        
+        
+        
+        
+        
+        makeVelocityReadout: function(r) {
+            var v = this.velocityReadout = {};
+                
+            v.fwdBkwd = this.makeCircle2(r);
+            // v.strafe = this.makeCircle2(r - 16);
+            // v.upDown = this.makeCircle2(r - 32);
+            
+            this.parent.add(v.fwdBkwd);
+            this.parent.add(v.strafe);
+            // this.parent.add(v.upDown);
+        },
+        
+        updateVelocityReadout: function(vel) {
+            var v = this.velocityReadout,
+                m = this.materialSettings;
+            
+            var divisor = 1000;
+            
+            var x = vel.x / divisor;
+            var y = -(vel.y / divisor);
+            
+            // v.fwdBkwd.rotation.;
+            // v.strafe.rotation.y = vel.x / 800;
+            // v.upDown.rotation.x = -(vel.y / 800);
+            v.fwdBkwd.rotation.y = vel.x / 1000;
+            v.fwdBkwd.rotation.x = -(vel.y / 1000);
+            
+            this.parent.remove(this.lineVel);
+            
+            if(vel.z !== 0) {
+                this.lineVel = this.makeCircle2(
+                    86+1,
+                    new THREE.LineBasicMaterial({color: m.color, opacity: m.opacity, linewidth: 4}),
+                    (vel.z * (180 / sceneManager.middleground.controls.maximumVelocity)) * (Math.PI / 180)
+                );
+            
+                this.lineVel.rotation.z -= Math.PI / 2;
+                this.lineVel.geometry.vertices.shift();
+            
+                this.lineVel.rotation.y = vel.x / 1000;
+                this.lineVel.rotation.x = -(vel.y / 1000);
+            
+                this.parent.add(this.lineVel);
+            }
+        },
+        
+        makeCircle2: function(r, mat, angle) {
+            var circle = new THREE.Shape();
+                
+            circle.moveTo(r, 0);
+            circle.absarc(0, 0, r, 0, angle || Math.PI*2, false);
+            
+            mat = mat || new THREE.LineBasicMaterial( this.materialSettings );
+            
+            circle = new THREE.Line(circle.createPointsGeometry(), mat);
+            return circle;
+        },
+        
+        
+        
+        
+        
         
         
         makeVelHealthOutline: function(x, y, r) {
@@ -173,9 +243,14 @@
         
         
         tick: function() {
-            this.parent.position.addSelf(this.velocity);
+            // this.parent.position.addSelf(this.velocity);
             
-            this.velocityToLinePosition(sceneManager.middleground.controls.velocityVector.z);
+            // this.velocityToLinePosition(sceneManager.middleground.controls.velocityVector.z);
+            
+            this.updateVelocityReadout(sceneManager.middleground.controls.velocityVector);
+            
+            // this.parent.position.x = ((window.innerWidth / 2) + (mouseHandler.x - (window.innerWidth / 2))) / 10000;
+            // this.parent.position.y = ((window.innerHeight / 2) + (mouseHandler.y - (window.innerHeight / 2))) / 10000;
             
             this.radar.tick();
             

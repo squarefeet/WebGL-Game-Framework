@@ -82,8 +82,8 @@
     
     MouseHandler.prototype.onMouseMove = function(e) {
         var that = this;
-        that.x = e.clientX;
-        that.y = e.clientY;
+        that.x = e.offsetX;
+        that.y = e.offsetY;
     };
     
 

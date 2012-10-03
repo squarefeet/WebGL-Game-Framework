@@ -29,19 +29,19 @@
 		// game world (ships, the player, etc). Giving this scene's camera
 		// a near clipping z position (I think it's a z-position anyway) of 3,
 		// so that the HUD doesn't get overlapped by any of this scenes objects.
-		this.middleground = new Scene(3, 100000);
-        this.middleground.fog = new THREE.Fog( 0x000000, 3500, 1000 );
-        this.middleground.fog.color.setHSV( 0.51, 0.6, 0.025 );
+		this.middleground = new Scene(1, 100000);
+        // this.middleground.scene.fog = new THREE.FogExp2( 0x000000, 0.0024 );
 		
 		
-		var light = new THREE.DirectionalLight(0x00c1f8, 1);
-		light.position.set(0, 0, -1);
-		this.middleground.camera.add(light);
+        // var light = new THREE.DirectionalLight(0x00c1f8, 1);
+        // light.position.set(0, 0, -1);
+        // this.middleground.camera.add(light);
 		
 		
 		// The foreground will hold static objects to sit on top of everything
 		// else (the HUD, lensflares, etc.).
 		this.foreground = new Scene();
+		
 		
         // An array to hold all the objects for each scene. Kept in bg -> fg
         // order.
@@ -91,7 +91,7 @@
 	    this.updateStores(store);
 	    
 	    // Fire the update event
-	    eventHandler.fire('scene:' + level + ':add', object);	    
+	    eventHandler.fire('scene:' + level + ':add', null, object);	    
 	    
 	    return this;
 	};
