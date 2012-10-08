@@ -7,7 +7,7 @@
     
     Radar.prototype = {
 
-        threshold: 5000,
+        threshold: 500000,
         
         dotRadius: 2,
         

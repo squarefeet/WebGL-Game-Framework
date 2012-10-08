@@ -10,6 +10,14 @@
         
         health: 100,
         
+        addX: 0,
+        addY: 0,
+        addZ: 0,
+        
+        maxVel: 10,
+        
+        
+        
         initialize: function(x, y, z, a, b, c, r) {
             
             this.ship = null;
@@ -42,13 +50,9 @@
                     
                     setInterval(function() {
                         
-                        that.currentTarget = {
-                            position: new THREE.Vector3(
-                                Math.random() * 1000,
-                                Math.random() * 1000,
-                                Math.random() * 1000
-                            )
-                        };
+                        that.addX = (Math.random() * 0.1) - 0.05;
+                        that.addY = (Math.random() * 0.1) - 0.05;
+                        that.addZ = (Math.random() * 0.1) - 0.05;
                         
                     }, 5000);
                     
@@ -56,6 +60,10 @@
             });
         },
         
+        
+        fumes: function() {
+            
+        },
         
         tick: function(dt) {
             if(!this.ship) {
@@ -75,6 +83,32 @@
             // this.ship.translateX(1);
             // this.ship.translateY(2);
             
+            this.velocity.x += this.addX;
+            this.velocity.y += this.addY;
+            this.velocity.z += this.addZ;
+            
+            if(this.velocity.x > this.maxVel) {
+                this.velocity.x = this.maxVel;
+            }
+            if(this.velocity.y > this.maxVel) {
+                this.velocity.y = this.maxVel;
+            }
+            if(this.velocity.z > this.maxVel) {
+                this.velocity.z = this.maxVel;
+            }
+            
+            
+            if(this.velocity.x < -this.maxVel) {
+                this.velocity.x = -this.maxVel;
+            }
+            if(this.velocity.y < -this.maxVel) {
+                this.velocity.y = -this.maxVel;
+            }
+            if(this.velocity.z < -this.maxVel) {
+                this.velocity.z = -this.maxVel;
+            }
+            
+            // this.ship.position.addSelf(this.velocity);
             
             this.ship.rotation.y = Math.atan2( - this.velocity.z, this.velocity.x );
             
