@@ -44,7 +44,15 @@
                     
                     that.ship.position = new THREE.Vector3(x, y, z);
                     
+                    var p = that.ship.position.clone();
+                    // p.x = 100;
+                    that.fumes = new Fumes( p );
+
+                    that.ship.add(that.fumes.particles);
                     that.renderables.push(that.ship);
+
+                    // that.renderables.push(that.fumes.particles);
+
                     
                     sceneManager.addObjectTo( 'middleground', that );
                     
@@ -110,10 +118,10 @@
             
             // this.ship.position.addSelf(this.velocity);
             
-            this.ship.rotation.y = Math.atan2( - this.velocity.z, this.velocity.x );
+            // this.ship.rotation.y = Math.atan2( - this.velocity.z, this.velocity.x );
             
             if(this.velocity.y !== 0) {
-			    this.ship.rotation.z = Math.asin( this.velocity.y / this.velocity.length() );
+                // this.ship.rotation.z = Math.asin( this.velocity.y / this.velocity.length() );
 		    }
             
             
@@ -129,6 +137,8 @@
                 
                 // this.ship.position.multiplySelf(this.ship.rotation);
             }
+            
+            this.fumes.tick();
         },
         
         firePrimary: function() {
